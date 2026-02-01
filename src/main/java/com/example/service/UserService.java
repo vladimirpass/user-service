@@ -32,7 +32,7 @@ public class UserService {
         }
     }
 
-    public void deleteStudent(Integer id) {
+    public void deleteUser(Integer id) {
         if(id > 0) {
             log.info("Delete user id: " + id);
             userDao.deleteUser(id);
