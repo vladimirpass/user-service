@@ -83,7 +83,7 @@ public class Menu {
         System.out.print("Введите ID пользователя для его удаления: ");
         if (scanner.hasNextInt()) {
             Integer id = scanner.nextInt();
-            service.deleteStudent(id);
+            service.deleteUser(id);
         }else {
             System.out.println("Введено неверное значение! Пользователь не может быть удален.");
         }
