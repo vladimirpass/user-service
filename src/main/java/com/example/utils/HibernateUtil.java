@@ -4,26 +4,38 @@ import com.example.entity.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 
-    private static SessionFactory sessionFactory;
+    private static final SessionFactory sessionFactory = buildSessionFactory();
+    private HibernateUtil() {
+    }
 
+    private static SessionFactory buildSessionFactory() {
+        try {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.addAnnotatedClass(User.class);
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties())
+                    .build();
+            return configuration.buildSessionFactory(serviceRegistry);
 
+        } catch (Exception e) {
+            System.err.println("Ошибка создания SessionFactory: " + e);
+            throw new ExceptionInInitializerError(e);
+        }
+    }
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            try {
-                Configuration configuration = new Configuration().configure();
-                configuration.addAnnotatedClass(User.class);
-                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-                sessionFactory = configuration.buildSessionFactory(builder.build());
-
-            } catch (Exception e) {
-                System.out.println("Исключение!" + e);
-            }
-        }
         return sessionFactory;
+    }
+
+    public static void shutdown() {
+        if (sessionFactory != null) {
+            sessionFactory.close();
+        }
     }
 
 }
