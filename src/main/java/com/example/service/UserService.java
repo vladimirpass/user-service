@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.dao.UserDao;
 import com.example.entity.User;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -10,7 +11,11 @@ import java.util.List;
 @Slf4j
 public class UserService {
 
-    private final UserDao userDao = new UserDao();
+    private final UserDao userDao;
+
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
 
     public User findUser(Integer id) {
