@@ -1,13 +1,15 @@
 package com.example.menu;
 
+import com.example.dao.UserDao;
 import com.example.entity.User;
 import com.example.service.UserService;
 
 import java.util.Scanner;
 
 public class Menu {
+    private static final UserDao userDao = new UserDao();
     private static final Scanner scanner = new Scanner(System.in);
-    private static final UserService service = new UserService();
+    private static final UserService service = new UserService(userDao);
     private static final String menu ="== Меню == \n1. Создать пользователя \n2. Посмотреть всех пользователей " +
             "\n3. Обновить данные пользователя \n4. Удалить пользователя \n5. Найти пользователя по ID \n0. Выход \n>";
 

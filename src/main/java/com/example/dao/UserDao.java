@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.entity.User;
 import com.example.utils.HibernateUtil;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,7 +12,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
+@NoArgsConstructor
 public class UserDao {
+
+    public UserDao(SessionFactory testSessionFactory) {
+    }
 
     public User saveUser(User user){
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -82,14 +87,15 @@ public class UserDao {
             transaction = session.beginTransaction();
             User userUpdate = session.get(User.class,id);
             if(session.get(User.class,id) != null) {
+                //userUpdate.setId(id);
                 userUpdate.setName(user.getName());
                 userUpdate.setAge(user.getAge());
                 userUpdate.setEmail(user.getEmail());
                 userUpdate.setCreateAt(LocalDateTime.now());
+                transaction.commit();
             } else{
                 System.out.println("Отсутствует пользователь с введенным индексом");
             }
-            transaction.commit();
         }catch (Exception e){
             if (transaction != null) transaction.rollback();
             throw new RuntimeException(e);
